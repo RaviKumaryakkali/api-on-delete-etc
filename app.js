@@ -36,54 +36,52 @@ app.get("/players/", async (request, response) => {
 
 app.post("/players/", async (request, response) => {
   const playerDetails = request.body;
-  const {playerName,jerseyNumber,role} = playerDetails;
+  const { playerName, jerseyNumber, role } = playerDetails;
   const addPlayerQuery = `
-    INSERT INTO cricket_team ("player_name","jersey_number","role")
-    VALUES (`${playerName}`,
+    INSERT INTO cricket_team (player_name,jersey_number,role)
+    VALUES ("${playerName}",
     ${jerseyNumber},
-    `${role}`)`;
+    "${role}")`;
   const dbResponse = await db.run(addPlayerQuery);
   const playerId = dbResponse.lastID;
   response.send("Player Added to Team");
-}); 
+});
 
 // get a player by id
 
-app.get("/players/:playerId/",async(request,response)=>{
-    const playerId = request.params;
-    const getPlayerQuery = `
+app.get("/players/:playerId/", async (request, response) => {
+  const playerId = request.params;
+  const getPlayerQuery = `
     SELECT * FROM crircket_team WHERE player_id = ${playerId}`;
-    const player = await db.get(getPlayerQuery);
-    response.send(player);
+  const player = await db.get(getPlayerQuery);
+  response.send(player);
 });
 
 //update a player
 
-app.post("/players/:playerId/",(request,response)=>{
-    const playerDetails = request.body;
-    const playerId = request.params;
-    const{playerName,jerseyNumber,role} = playerDetails;
-    const updatePlayerQuery = `
+app.post("/players/:playerId/", async (request, response) => {
+  const playerDetails = request.body;
+  const playerId = request.params;
+  const { playerName, jerseyNumber, role } = playerDetails;
+  const updatePlayerQuery = `
     UPDATE cricket_team SET 
     "playerName":"Maneesh",
     "jerseyNumber":54,
     "role":"All-rounder"
     WHERE 
     player_id = ${playerID};`;
-    
-    await db.run(updatePlayerQuery);
-    response.send("player Details Updated");
 
+  await db.run(updatePlayerQuery);
+  response.send("player Details Updated");
 });
-
 
 //DELETE a player
 
-app.delete("/players/:playerId/",(request,response) => {
-    const playerDetails = request.body;
-    const playerId = request.params;
-    const deleteBookQuery = `
+app.delete("/players/:playerId/", async (request, response) => {
+  const playerDetails = request.body;
+  const playerId = request.params;
+  const deleteBookQuery = `
     DELETE FROM player_details WHERE player_id = ${playerId};`;
-    await db.run(deleteBookQuery);
-    response.send("player Removed")
+  await db.run(deleteBookQuery);
+  response.send("player Removed");
 });
