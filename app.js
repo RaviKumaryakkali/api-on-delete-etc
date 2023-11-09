@@ -5,6 +5,16 @@ const path = require("path");
 const app = express();
 const dbPath = path.join(__dirname, "cricketTeam.db");
 app.use(express.json());
+module.export = app;
+
+const convertDbObjectToResponseObject = (dbObject) => {
+  return {
+    playerId: dbObject.player_id,
+    playerName: dbObject.player_name,
+    jerseyNumber: dbObject.jersey_number,
+    role: dbObject.role,
+  };
+};
 
 const initializeDBAndServer = async () => {
   try {
@@ -29,7 +39,9 @@ app.get("/players/", async (request, response) => {
   const getPlayersQuery = `
     SELECT * FROM cricket_team ORDER BY player_id`;
   const dbResponse = await db.all(getPlayersQuery);
-  response.send(dbResponse);
+  response.send(
+    dbResponse.map((eachPlayer) => convertDbObjectToResponseObject(eachPlayer))
+  );
 });
 
 // post player api
