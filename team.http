@@ -16,7 +16,7 @@ GET http://localhost:3000/players/:playerId/
 
 ###
 
-PUT http://localhost:3000/players/17/
+PUT http://localhost:3000/players/:playerId/
 
 Content-Type: application/json
 
@@ -28,4 +28,4 @@ Content-Type: application/json
 
 ###
 
-delete http://localhost:3000/players/17/
+delete http://localhost:3000/players/:playerId/
